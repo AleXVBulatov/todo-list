@@ -2,6 +2,7 @@
 // ----------------- localStorage ------------------
 
 const ref = {
+  body: document.querySelector("body"),
   buttonEdit: document.querySelector(".js-edit"),
   title: document.querySelector(".js-title"),
   inputTitle: document.querySelector(".js-inputTitle"),
@@ -11,27 +12,35 @@ const ref = {
   buttonRem: document.querySelector(".js-button-rem"),
   modal: document.querySelector(".js-modal"),
 }
-const { buttonEdit, title, input, inputTitle, itemsList, buttonAdd, buttonRem, modal } = ref;
+const { body, buttonEdit, title, input, inputTitle, itemsList, buttonAdd, buttonRem, modal } = ref;
 // console.log(title, input, itemsList, buttonAdd, buttonRem);
 
 let items = JSON.parse(localStorage.getItem("items")) || [];  // взять значения из localStorage
 // console.log(items);
 title.textContent = localStorage.getItem("titleLocal") || title.textContent; // взять значения из localStorage
 // console.log(title);
-console.log(modal);
 
-// Проверка для включения prompt
+
+// Всплытие инпута
 function editTitle() {
   inputTitle.classList.toggle("hidden");
   inputTitle.focus();
+
   if (inputTitle.value.length === 0) {
     return;
   };
   title.textContent = inputTitle.value;
-
   localStorage.setItem("titleLocal", title.textContent);
   inputTitle.value = "";
+  
 };
+// Всплытие инпута
+body.addEventListener("click", (event) => {
+  if (event.target.nodeName !== "I" && !inputTitle.classList.contains("hidden")) {
+    editTitle()
+    return;
+  }
+});
 
 
 // Добавить фокус на input 
@@ -155,8 +164,7 @@ function toggleClick(event) {
   displayItems(items, itemsList);
 };
 
-
-// Не работает!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// функция удаления элемента списка
 function btnCancel(event) {
   // console.log(event.target);
   // console.log(event.target.matches("i"));
@@ -164,8 +172,7 @@ function btnCancel(event) {
     return;
   };
   const element = event.target.dataset.index;
-  console.log(element);
-
+  // console.log(element);
   items.splice(element, 1);
   localStorage.setItem("items", JSON.stringify(items)); // записать значения в localStorage
   displayItems(items, itemsList);
@@ -180,6 +187,7 @@ function modalOpenClose(event) {
 };
 buttonEdit.addEventListener("mouseover", modalOpenClose);
 buttonEdit.addEventListener("mouseout", modalOpenClose);
+
 
 // Слушатели событий
 itemsList.addEventListener("click", btnCancel);
