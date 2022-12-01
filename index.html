@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My list</title>
+  <link rel="stylesheet" href="css/fontello.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:regular,700,700italic" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="container">
+      <div class="block">
+        <div class="block__content content-block">
+          <div class="content-block__info">
+            <h1 class="content-block__title js-title">Список дел!</h1>
+            <i class="content-block__icon icon-pencil js-edit">
+              <div class="modalWindow js-modal hidden">
+                <div class="modalWindow__block">
+                  <h2 class="modalWindow__title">Нажмите, чтобы редактировать заголовок</h2>
+                </div>
+              </div>
+            </i>
+            <input class="content-block__input js-inputTitle hidden" type="text" name="title" placeholder="Введите новое название...">
+          </div>          
+          <ul class="content-block__items-list js-items-list">
+            <li></li>
+          </ul>
+        </div>
+        <div class="block__control control-block js-add-items-form">
+          <input class="control-block__input js-input" type="text" name="item" placeholder="Введите текст..." autocomplete="off" required>
+          <div class="control-block__buttons buttons-block">
+            <button class="buttons-block__btn disabled js-button-add">Добавить</button>
+            <button class="buttons-block__btn disabled buttons-block__btn_red js-button-rem">Очистить</button>
+            <!-- <button class="buttons-block__btn disabled buttons-block__btn_red js-button-rem">Удалить отмеченные</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+
+
+  <script src="js/script.js"></script>
+</body>
+</html>
