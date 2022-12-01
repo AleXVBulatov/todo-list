@@ -34,13 +34,13 @@ function editTitle() {
   inputTitle.value = "";
   
 };
-// Всплытие инпута
-body.addEventListener("click", (event) => {
+// Скрыть всплытие инпута
+function closeInputTitle(event) {
   if (event.target.nodeName !== "I" && !inputTitle.classList.contains("hidden")) {
     editTitle()
     return;
-  }
-});
+  };
+};
 
 
 // Добавить фокус на input 
@@ -61,7 +61,7 @@ window.addEventListener("keydown", (event) => {
 });
 
 
-// функция удаления класса с кнопку
+// функция если в инпуте больше 0 символов, то удалить с кнопки disabled
 function activeBtnAdd() {
   // console.log(input.value.length > 0);
   if (input.value.length > 0) {
@@ -139,6 +139,7 @@ function displayItems(items, itemsList) {
     <li>
       <input type="checkbox" id="item${index}" class="input-check" data-index="${index}" ${item.checked ? "checked" : "" } />        
       <label for="item${index}" ${item.checked ? "class='list-through'" : ""}>${index + 1}. ${item.text}</label>
+      <i ${!item.checked ? "class='icon-pencil js-button-pencil'" : ""} data-index="${index}"></i>  
       <i ${item.checked ? "class='icon-cancel js-button-cansel'" : ""} data-index="${index}"></i>  
     </li>`;
   }).join("");
@@ -162,21 +163,122 @@ function toggleClick(event) {
   localStorage.setItem("items", JSON.stringify(items)); // записать значения в localStorage
 
   displayItems(items, itemsList);
+  input.value = "";
+  btn.classList.add("hidden");
+  buttonAdd.classList.remove("hidden")
 };
 
-// функция удаления элемента списка
+
+// функция удаления и редактирования элементов списка
 function btnCancel(event) {
   // console.log(event.target);
+  // console.log(event.target.classList);
   // console.log(event.target.matches("i"));
   if (!event.target.matches("i")) {
     return;
   };
-  const element = event.target.dataset.index;
-  // console.log(element);
-  items.splice(element, 1);
+  if (event.target.classList.contains('js-button-cansel')) {
+    const element = event.target.dataset.index;
+    // console.log(element);
+    items.splice(element, 1);
+
+    localStorage.setItem("items", JSON.stringify(items)); // записать значения в localStorage
+    displayItems(items, itemsList);
+    return
+  };
+  if (event.target.classList.contains('js-button-pencil')) {
+    btn.classList.toggle("hidden");
+    buttonAdd.classList.toggle("hidden")
+
+    const element = event.target.dataset.index;
+    // console.log(element);
+    const editText = input.value = items[element].text; 
+    // console.log(editText); // Получили в переменную текст
+
+    const needLabelRef = itemsList.querySelectorAll("label")[element];
+    // console.log(needLabelRef);
+    needLabelRef.classList.toggle("colored");
+    input.focus()
+    return;
+  };
+};
+
+
+// console.log(itemsList);
+
+
+const btn = document.querySelector(".js-button-edit");
+// console.log(btn);
+
+
+btn.addEventListener("click", function edit(event) {
+  // console.log(event.target);
+  
+  const editText = input.value;
+  // console.log(editText);
+  
+
+  const labelRef = itemsList.querySelectorAll("label");
+  // console.log(labelRef);
+
+  let needelem;
+
+  labelRef.forEach((elem, index) => {
+    // console.log(elem);
+    if (elem.classList.contains("colored")) {
+      needelem = index;
+    };
+    return needelem;
+  });
+  // console.log(needelem);
+
+
+  // console.log(items[needelem].text);
+  items[needelem].text = input.value
+
+
   localStorage.setItem("items", JSON.stringify(items)); // записать значения в localStorage
   displayItems(items, itemsList);
+  input.value = "";
+  btn.classList.toggle("hidden");
+  buttonAdd.classList.toggle("hidden");
+  buttonAdd.classList.add("disabled")
+});
+
+// Работа кнопки Escape
+function enterEsc(event) {
+  // console.log(buttonAdd.classList.contains("hidden"));
+  if (event.code === "Escape" && buttonAdd.classList.contains("hidden")) {
+    input.value = "";
+    inputTitle.value = "";
+    buttonAdd.classList.add("disabled");
+    buttonAdd.classList.remove("hidden");
+    inputTitle.classList.add("hidden");
+    btn.classList.add("hidden");
+
+    // Для удаления выделения вета при нажатии ESC
+    const labelRef = itemsList.querySelectorAll("label");
+    // console.log(labelRef);
+
+    labelRef.forEach((elem, index) => {
+      if (elem.classList.contains("colored")) {
+        elem.classList.remove("colored");
+      };
+    });
+
+  } else if (event.code === "Escape" && !buttonAdd.classList.contains("disabled")) {
+    input.value = "";
+    inputTitle.value = "";
+    inputTitle.classList.add("hidden");
+    buttonAdd.classList.add("disabled");
+  } else if (event.code === "Escape") {
+    input.value = "";
+    inputTitle.value = "";
+    inputTitle.classList.add("hidden");
+  };
+
 };
+
 
 
 // Всплытие моддального окна
@@ -190,9 +292,11 @@ buttonEdit.addEventListener("mouseout", modalOpenClose);
 
 
 // Слушатели событий
-itemsList.addEventListener("click", btnCancel);
-buttonEdit.addEventListener("click", editTitle);
-input.addEventListener("input", activeBtnAdd);
+body.addEventListener("click", closeInputTitle); // Слушатель на скрытие inputTitle 
+window.addEventListener("keydown", enterEsc); // Слушатель на клавишу ESC
+itemsList.addEventListener("click", btnCancel); // Слушатель на редактирование и удаление элементов списка
+buttonEdit.addEventListener("click", editTitle); // Слушатель на редактирование заглавия
+input.addEventListener("input", activeBtnAdd); // Слушатель на добавление или удаления класса на кнопки disabled
 buttonAdd.addEventListener("click", addItem);
 window.addEventListener("keydown", addItemEnter);
 buttonRem.addEventListener("click", removeList);
@@ -201,17 +305,3 @@ itemsList.addEventListener("click", toggleClick);
 displayItems(items, itemsList); // для отображения списка после перезагрузки страницы
 
 
-
-// Всплытие моддального окна
-// buttonEdit.addEventListener("mouseover", (event) => {
-//   // console.log(event.target.nodeName);
-//   if (event.target.nodeName === "I") {
-//     modal.classList.remove("hidden");
-//   };
-// });
-// buttonEdit.addEventListener("mouseout", (event) => {
-//   // console.log(event.target.nodeName);
-//   if (event.target.nodeName === "I") {
-//     modal.classList.add("hidden");
-//   };
-// });

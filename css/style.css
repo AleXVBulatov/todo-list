@@ -93,11 +93,18 @@ body {
     border-radius: 5px;
 }
 .icon-cancel {
-    /* color: rgb(131, 85, 0); */
     color: rgb(145, 39, 39);
     background-color: rgb(46, 45, 43);
     font-size: 20px;
     padding-left: 10px;
+    cursor: pointer;
+}
+ul .icon-pencil {
+    color: rgb(180, 180, 180);
+    background-color: rgb(46, 45, 43);
+    font-size: 20px;
+    padding-left: 10px;
+    cursor: pointer;
 }
 .input-check {
     margin-right: 10px;
@@ -175,7 +182,7 @@ body {
     width: 320px;
     height: auto;
     padding: 5px 10px;
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(180, 180, 180);
     border-radius: 10px;
     text-align: center;
     transform: translate(0, -100%);
@@ -187,7 +194,9 @@ body {
     color: #000
 }
 
-
+.colored {
+    color: rgb(190, 40, 40);
+}
 
 
 @media (max-width: 1025px) {
