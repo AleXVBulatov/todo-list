@@ -146,6 +146,7 @@ ul .icon-pencil {
 
 }
 .buttons-block__btn {
+    width: 120px;
     background-color: rgb(131, 85, 0);
     color: white;
     font-size: 20px;

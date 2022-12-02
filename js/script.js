@@ -32,15 +32,16 @@ function editTitle() {
   };
   title.textContent = inputTitle.value;
   localStorage.setItem("titleLocal", title.textContent);
-  inputTitle.value = "";
-  
+  inputTitle.value = "";  
 };
+
 // Скрыть всплытие инпута
 function closeInputTitle(event) {
   if (event.target.nodeName !== "I" && !inputTitle.classList.contains("hidden") && event.target.nodeName !== "INPUT") {
-    editTitle();
+    inputTitle.value = ""
+    inputTitle.classList.toggle("hidden");
     return;
-  }; 
+  };  
 };
 
 
@@ -67,8 +68,10 @@ function activeBtnAdd() {
   // console.log(input.value.length > 0);
   if (input.value.length > 0) {
     buttonAdd.classList.remove("disabled");
+    btn.classList.remove("disabled");
   } else {
     buttonAdd.classList.add("disabled");
+    btn.classList.add("disabled");
   }; 
 };
 
@@ -105,10 +108,16 @@ function addItem() {
 // функция добавления элементов в список (по кнопке Enter)
 function addItemEnter(event) {
   // console.log(event.code);
-  if ((event.code === "Enter" || event.code === "NumpadEnter") && input.value.length !== 0) {
+
+  if ((event.code === "Enter" || event.code === "NumpadEnter") && input.value.length !== 0 && btn.classList.contains("hidden")) {
     addItem();
+
+  } else if ((event.code === "Enter" || event.code === "NumpadEnter") && input.value.length !== 0 && buttonAdd.classList.contains("hidden")) {
+    edit();
+
   } else if ((event.code === "Enter" || event.code === "NumpadEnter") && inputTitle.value.length !== 0) {
     editTitle();
+
   } else {
     return
   };
@@ -163,10 +172,9 @@ function toggleClick(event) {
 
   localStorage.setItem("items", JSON.stringify(items)); // записать значения в localStorage
 
-  displayItems(items, itemsList);
+  displayItems(items, itemsList);  
   input.value = "";
-  btn.classList.add("hidden");
-  buttonAdd.classList.remove("hidden")
+  buttonAdd.classList.add("disabled");
 };
 
 
@@ -179,44 +187,45 @@ function btnCancel(event) {
     return;
   };
 
-  if (event.target.classList.contains('js-button-cansel')) {
+  if (event.target.classList.contains('js-button-cansel') && buttonAdd.classList.contains("disabled")) {
     const element = event.target.dataset.index;
     // console.log(element);
     items.splice(element, 1);
 
     localStorage.setItem("items", JSON.stringify(items)); // записать значения в localStorage
     displayItems(items, itemsList);
+
+    window.addEventListener("keydown", addItemEnter);
     return
   };
 
-  if (event.target.classList.contains('js-button-pencil')) {
-    window.removeEventListener("keydown", addItemEnter);
-    // console.log(input.value.length);    
+  if (event.target.classList.contains('js-button-pencil') && buttonAdd.classList.contains("disabled")) {
+    console.log(input.value.length);
     const element = event.target.dataset.index;
     // console.log(element);
     const needLabelRef = itemsList.querySelectorAll("label")[element];
     // console.log(needLabelRef);
     
-    if (input.value.length === 0) {
+    if (input.value.length === 0 && !needLabelRef.classList.contains("colored")) {
       const editText = input.value = items[element].text;
       // console.log(editText); // Получили в переменную текст
-      needLabelRef.classList.toggle("colored");
-      btn.classList.toggle("hidden");
-      buttonAdd.classList.toggle("hidden");
+      needLabelRef.classList.add("colored");
+      btn.classList.remove("hidden");
+      buttonAdd.classList.add("hidden");
       input.focus();
       return;
     };
 
+    activeBtnAdd();
     if (input.value.length > 0) {
       const element = event.target.dataset.index;
       // console.log(element);
       input.value = ""; 
       // console.log(editText); // Получили в переменную текст
-      needLabelRef.classList.toggle("colored");
-      btn.classList.toggle("hidden");
-      buttonAdd.classList.toggle("hidden");
+      needLabelRef.classList.remove("colored");
+      btn.classList.add("hidden");
+      buttonAdd.classList.remove("hidden");
       buttonAdd.classList.add("disabled");
-      window.addEventListener("keydown", addItemEnter);
       return
     };
   };
@@ -226,10 +235,12 @@ function btnCancel(event) {
 // Функция по работа кнопки Изменить
 function edit() {
   // console.log(event.target);
-  
+  if (btn.classList.contains("disabled")) {
+    return;
+  };
   const editText = input.value;
   // console.log(editText);
-  
+
   const labelRef = itemsList.querySelectorAll("label");
   // console.log(labelRef);
 
@@ -291,6 +302,14 @@ function enterEsc(event) {
 };
 
 
+function enterDel(event) {
+  if (event.code === "Delete") {
+    input.value = "";
+    inputTitle.value = "";
+  };
+  activeBtnAdd();
+};
+
 
 // Всплытие моддального окна
 function modalOpenClose(event) {
@@ -304,12 +323,13 @@ buttonEdit.addEventListener("mouseout", modalOpenClose);
 
 // Слушатели событий
 body.addEventListener("click", closeInputTitle); // Слушатель на скрытие inputTitle 
-window.addEventListener("keydown", enterEsc); // Слушатель на клавишу ESC
 itemsList.addEventListener("click", btnCancel); // Слушатель на редактирование и удаление элементов списка
 buttonEdit.addEventListener("click", editTitle); // Слушатель на редактирование заглавия
 input.addEventListener("input", activeBtnAdd); // Слушатель на добавление или удаления класса на кнопки disabled
 btn.addEventListener("click", edit); // Слушатель на кнопку изменить
 buttonAdd.addEventListener("click", addItem);
+window.addEventListener("keydown", enterDel); // Слушатель на клавишу Del
+window.addEventListener("keydown", enterEsc); // Слушатель на клавишу ESC
 window.addEventListener("keydown", addItemEnter);
 buttonRem.addEventListener("click", removeList);
 itemsList.addEventListener("click", toggleClick);
