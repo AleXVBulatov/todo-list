@@ -229,7 +229,7 @@ function btnCancel(event) {
     };
 
     activeBtnAdd();    
-    if (input.value.length > 0) {
+    if (input.value.length > 0 && btn.classList.contains("hidden")) {
       // console.log(element);
       input.value = ""; 
       // console.log(editText); // Получили в переменную текст
