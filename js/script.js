@@ -150,7 +150,7 @@ function displayItems(items, itemsList) {
       <input type="checkbox" id="item${index}" class="input-check" data-index="${index}" ${item.checked ? "checked" : "" } />        
       <label for="item${index}" ${item.checked ? "class='list-through'" : ""}>${index + 1}. ${item.text}</label>
       <i ${!item.checked ? "class='icon-pencil js-button-pencil'" : ""} data-index="${index}"></i>  
-      <i ${item.checked ? "class='icon-cancel js-button-cansel'" : ""} data-index="${index}"></i>  
+      <i ${item.checked ? "class='icon-cross js-button-cansel'" : ""} data-index="${index}"></i>  
     </li>`;
   }).join("");
 
@@ -166,9 +166,13 @@ function toggleClick(event) {
   if (!event.target.matches("input")) {
     return;
   };
-  // console.log(event.target.dataset.index);
+  if (buttonAdd.classList.contains("hidden")) {
+    return;
+  }
+  console.log(event.target.dataset.index);
   const element = event.target.dataset.index;
   items[element].checked = !items[element].checked; // поменять значение на противоположное
+  event.target.classList.toggle("disabled");
 
   localStorage.setItem("items", JSON.stringify(items)); // записать значения в localStorage
 
@@ -198,9 +202,16 @@ function btnCancel(event) {
     window.addEventListener("keydown", addItemEnter);
     return
   };
-
+// =============================================
+  console.log(event.currentTarget);
+  const LabelRef = itemsList.querySelectorAll("label");
+  console.log(LabelRef);
+  const element = event.target.dataset.index;
+  console.log(element);
+  console.log(LabelRef[element]);
+// =============================================
   if (event.target.classList.contains('js-button-pencil') && buttonAdd.classList.contains("disabled")) {
-    console.log(input.value.length);
+    // console.log(input.value.length);
     const element = event.target.dataset.index;
     // console.log(element);
     const needLabelRef = itemsList.querySelectorAll("label")[element];
@@ -211,14 +222,14 @@ function btnCancel(event) {
       // console.log(editText); // Получили в переменную текст
       needLabelRef.classList.add("colored");
       btn.classList.remove("hidden");
+      btn.classList.remove("disabled");
       buttonAdd.classList.add("hidden");
       input.focus();
       return;
     };
 
-    activeBtnAdd();
+    activeBtnAdd();    
     if (input.value.length > 0) {
-      const element = event.target.dataset.index;
       // console.log(element);
       input.value = ""; 
       // console.log(editText); // Получили в переменную текст

@@ -76,6 +76,8 @@ body {
     margin-right: 20px;
 }
 .content-block__input {
+    position: relative;
+    top: -5px;
     flex: 1 1 40%;
     width: 60%;
     font-size: 20px;
@@ -86,13 +88,16 @@ body {
 }
 .content-block__icon {
     position: relative;
-    padding-top: auto;
-    font-size: 28px;
-    color: rgb(131, 85, 0);
-    border: 1px solid rgb(255, 255, 255);
+    top: -5px;
+    padding: 5px;
+    font-size: 20px;
+    color: rgb(180, 180, 180);
+    /* color: rgb(131, 85, 0); */
+    border: 2px solid rgb(131, 85, 0);
+    /* border: 1px solid rgb(255, 255, 255); */
     border-radius: 5px;
 }
-.icon-cancel {
+.icon-cross {
     color: rgb(145, 39, 39);
     background-color: rgb(46, 45, 43);
     font-size: 20px;
@@ -164,7 +169,7 @@ ul .icon-pencil {
 
 
 .disabled {
-    background-color: gray;
+    background-color: rgb(180, 180, 180);
     opacity: 0.5;
     cursor: default;
 }
