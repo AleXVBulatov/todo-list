@@ -38,14 +38,15 @@ body {
 }
 
 /* Ссылка на иконку документа*/
-.link {
-    color: #000;
+.footer {
     padding: 5px 0px;
     text-align: center;
-    background-color:#fff
+    background-color:rgb(100, 100, 100);
+    width: 75%;
+    margin: 0 auto;
 }
-.link a{
-    color: rgb(145, 39, 39);
+.footer a{
+    color: #fff;
 }
 /* =============================== */
 
@@ -222,6 +223,9 @@ ul .icon-pencil {
     .block {
         width: 85%;
     }
+    .footer {
+        width: 85%;
+    }
 }
 
 @media (max-width: 768px) {
@@ -253,6 +257,9 @@ ul .icon-pencil {
         display: none;
         right: 0px;
         transform: translate(0, -100%);
+    }
+    .footer {
+        width: 100%;
     }
 }
 
