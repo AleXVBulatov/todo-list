@@ -24,6 +24,9 @@ title.textContent = localStorage.getItem("titleLocal") || title.textContent; // 
 
 // Всплытие инпута
 function editTitle() {
+  if (buttonAdd.classList.contains("hidden")) {
+    return;
+  };
   inputTitle.classList.toggle("hidden");
   inputTitle.focus();
 
@@ -191,7 +194,7 @@ function btnCancel(event) {
     return;
   };
 
-  if (event.target.classList.contains('js-button-cansel') && buttonAdd.classList.contains("disabled")) {
+  if (event.target.classList.contains('js-button-cansel') && buttonAdd.classList.contains("disabled") && inputTitle.classList.contains("hidden")) {
     const element = event.target.dataset.index;
     // console.log(element);
     items.splice(element, 1);
@@ -202,15 +205,8 @@ function btnCancel(event) {
     window.addEventListener("keydown", addItemEnter);
     return
   };
-// =============================================
-  console.log(event.currentTarget);
-  const LabelRef = itemsList.querySelectorAll("label");
-  console.log(LabelRef);
-  const element = event.target.dataset.index;
-  console.log(element);
-  console.log(LabelRef[element]);
-// =============================================
-  if (event.target.classList.contains('js-button-pencil') && buttonAdd.classList.contains("disabled")) {
+
+  if (event.target.classList.contains('js-button-pencil') && buttonAdd.classList.contains("disabled") && inputTitle.classList.contains("hidden")) {
     // console.log(input.value.length);
     const element = event.target.dataset.index;
     // console.log(element);
