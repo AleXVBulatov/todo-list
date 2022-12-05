@@ -36,6 +36,19 @@ body {
     background-color: rgb(180, 180, 180);
     font-family: roboto;
 }
+
+/* Ссылка на иконку документа*/
+.link {
+    color: #000;
+    padding: 5px 0px;
+    text-align: center;
+    background-color:#fff
+}
+.link a{
+    color: rgb(145, 39, 39);
+}
+/* =============================== */
+
 .wrapper {
 
 }
